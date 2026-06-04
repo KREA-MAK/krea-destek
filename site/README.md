@@ -9,8 +9,6 @@ Backend gerektirmez; herhangi bir statik barındırma servisinde çalışır.
 site/
 ├── index.html         # Ana yardım merkezi sayfası
 ├── 404.html           # Bulunamadı sayfası
-├── CNAME              # Özel alan adı (destek.krea.tr)
-├── .nojekyll          # GitHub Pages Jekyll işlemesini kapatır
 └── assets/
     ├── styles.css     # Stiller
     ├── main.js        # SSS arama/filtre + mailto destek formu
@@ -25,20 +23,44 @@ python3 -m http.server 8080
 # tarayıcıda http://localhost:8080
 ```
 
-## Yayınlama (GitHub Pages)
+## Yayınlama (SiteGround / SSH)
 
-`.github/workflows/deploy-pages.yml` iş akışı, `site/` altında bir değişiklik
-push edildiğinde siteyi otomatik olarak GitHub Pages'e dağıtır.
+Site SiteGround'a SSH üzerinden `rsync` ile dağıtılır. İki yol vardır:
 
-Tek seferlik kurulum (depo ayarlarından):
+### 1) Otomatik (GitHub Actions)
 
-1. **Settings → Pages → Build and deployment → Source: GitHub Actions** seçin.
-2. DNS sağlayıcınızda `destek.krea.tr` için bir `CNAME` kaydı oluşturup
-   `<kullanıcı>.github.io` adresine yönlendirin (apex değil, alt alan adı).
-3. İş akışı çalıştıktan sonra **Settings → Pages → Custom domain** alanında
-   `destek.krea.tr` görünür ve "Enforce HTTPS" işaretlenebilir.
+`.github/workflows/deploy-siteground.yml` iş akışı, `site/` altında bir
+değişiklik push edildiğinde siteyi otomatik olarak SiteGround'a dağıtır.
+
+Depo **Settings → Secrets and variables → Actions** altında şu secret'ları
+tanımlayın:
+
+| Secret           | Açıklama                                                  |
+| ---------------- | -------------------------------------------------------- |
+| `SG_SSH_HOST`    | SiteGround SSH sunucusu (ör. `giadaXX.siteground.biz`)   |
+| `SG_SSH_USER`    | SSH kullanıcı adı                                        |
+| `SG_SSH_PORT`    | SSH portu (SiteGround genelde `18765`)                   |
+| `SG_SSH_KEY`     | Özel SSH anahtarı (PEM içeriği)                          |
+| `SG_DEPLOY_PATH` | Hedef dizin, ör. `~/www/destek.krea.tr/public_html`      |
+
+> SiteGround'da SSH anahtarını **Site Tools → Devs → SSH Keys Manager**
+> üzerinden oluşturup, özel anahtarı `SG_SSH_KEY` secret'ı olarak ekleyin.
+
+### 2) Elle (yerelden)
+
+```bash
+export SG_SSH_HOST="giadaXX.siteground.biz"
+export SG_SSH_USER="kullanici"
+export SG_SSH_PORT="18765"
+export SG_DEPLOY_PATH="~/www/destek.krea.tr/public_html"
+export SG_SSH_KEY="$HOME/.ssh/siteground_key"   # opsiyonel
+./scripts/deploy-siteground.sh
+```
+
+Script `site/` içeriğini hedefe senkronize eder (`--delete` ile sunucuda
+artık bulunmayan dosyaları temizler).
 
 ## Başka bir servise yükleme
 
 `site/` klasörünün içeriğini olduğu gibi Netlify, Vercel, Cloudflare Pages
-veya herhangi bir statik sunucuya yükleyebilirsiniz — build adımı yoktur.
+veya herhangi bir statik sunucuya da yükleyebilirsiniz — build adımı yoktur.

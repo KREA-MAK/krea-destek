@@ -22,7 +22,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check deploy secrets
+        id: check
+        run: |
+          if [ -z "${{ secrets.SG_SSH_HOST }}" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=SiteGround deploy atlandı::SG_SSH_* secret'ları tanımlı değil. Deploy için Settings → Secrets and variables → Actions altında SG_SSH_HOST, SG_SSH_USER, SG_SSH_PORT, SG_SSH_KEY, SG_DEPLOY_PATH ekleyin."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup SSH key
+        if: steps.check.outputs.configured == 'true'
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SG_SSH_KEY }}" > ~/.ssh/id_deploy
@@ -32,6 +43,7 @@ jobs:
           SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
 
       - name: Deploy via rsync
+        if: steps.check.outputs.configured == 'true'
         run: |
           rsync -avz --delete \
             --exclude ".DS_Store" \

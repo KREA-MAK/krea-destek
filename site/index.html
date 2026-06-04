@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Krea Destek — Yardım Merkezi</title>
+  <meta name="description" content="Krea destek merkezi. Sıkça sorulan sorular, destek talebi oluşturma ve iletişim kanalları." />
+  <meta name="theme-color" content="#0f766e" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <meta property="og:title" content="Krea Destek — Yardım Merkezi" />
+  <meta property="og:description" content="Krea destek merkezi. Sıkça sorulan sorular, destek talebi oluşturma ve iletişim kanalları." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://destek.krea.tr/" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true">K</span>
+        <span class="brand-text">Krea <strong>Destek</strong></span>
+      </a>
+      <nav class="nav" aria-label="Ana menü">
+        <a href="#nasil">Nasıl yardım alırım?</a>
+        <a href="#sss">SSS</a>
+        <a href="#iletisim">İletişim</a>
+        <a class="btn btn-primary nav-cta" href="#talep">Destek Talebi</a>
+      </nav>
+      <button class="nav-toggle" aria-label="Menüyü aç" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <p class="eyebrow">Krea Yardım Merkezi</p>
+        <h1>Size nasıl <span class="accent">yardımcı</span> olabiliriz?</h1>
+        <p class="lead">
+          Sorularınızın yanıtını bulun, rehberlerimize göz atın ya da destek
+          ekibimizle doğrudan iletişime geçin. Çoğu sorunun cevabı aşağıda.
+        </p>
+        <form class="search" role="search" onsubmit="return false;">
+          <input type="search" id="search-input" placeholder="Bir konu arayın: fatura, şifre, kurulum…" aria-label="Yardım konusu ara" />
+          <button class="btn btn-primary" type="submit">Ara</button>
+        </form>
+        <p class="hero-hint">Örn: <button class="chip" data-q="şifre">şifre sıfırlama</button> <button class="chip" data-q="fatura">fatura</button> <button class="chip" data-q="hesap">hesap</button></p>
+      </div>
+    </section>
+
+    <!-- HIZLI KARTLAR -->
+    <section class="container cards" aria-label="Hızlı erişim">
+      <a class="card" href="#sss">
+        <span class="card-icon">📚</span>
+        <h3>Bilgi Tabanı</h3>
+        <p>Adım adım rehberler ve sık karşılaşılan sorunların çözümleri.</p>
+      </a>
+      <a class="card" href="#talep">
+        <span class="card-icon">🎫</span>
+        <h3>Destek Talebi Aç</h3>
+        <p>Sorununuzu iletin, ekibimiz en kısa sürede dönüş yapsın.</p>
+      </a>
+      <a class="card" href="#iletisim">
+        <span class="card-icon">💬</span>
+        <h3>Bize Ulaşın</h3>
+        <p>E-posta ve diğer kanallardan doğrudan iletişim kurun.</p>
+      </a>
+      <a class="card" href="#durum">
+        <span class="card-icon">📶</span>
+        <h3>Sistem Durumu</h3>
+        <p>Hizmetlerimizin güncel çalışma durumunu görüntüleyin.</p>
+      </a>
+    </section>
+
+    <!-- NASIL YARDIM ALIRIM -->
+    <section id="nasil" class="container section">
+      <h2>Nasıl yardım alırım?</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="step-no">1</span>
+          <h3>Önce arayın</h3>
+          <p>Yukarıdaki arama kutusunu veya aşağıdaki SSS bölümünü kullanarak sorununuzu hızlıca çözebilirsiniz.</p>
+        </div>
+        <div class="step">
+          <span class="step-no">2</span>
+          <h3>Talep oluşturun</h3>
+          <p>Cevap bulamadıysanız destek talebi formunu doldurun; konuyu olabildiğince ayrıntılı yazın.</p>
+        </div>
+        <div class="step">
+          <span class="step-no">3</span>
+          <h3>Yanıt bekleyin</h3>
+          <p>Talebiniz ekibimize ulaşır. Çalışma saatleri içinde genellikle 1 iş günü içinde dönüş yapılır.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SSS -->
+    <section id="sss" class="container section">
+      <h2>Sıkça Sorulan Sorular</h2>
+      <div class="faq" id="faq-list">
+        <details class="faq-item">
+          <summary>Şifremi nasıl sıfırlarım?</summary>
+          <div class="faq-body">
+            <p>Giriş ekranındaki <strong>“Şifremi unuttum”</strong> bağlantısına tıklayın ve hesabınıza kayıtlı e-posta adresinizi girin. Size gönderilen bağlantı üzerinden yeni bir şifre belirleyebilirsiniz. E-posta gelmediyse spam/gereksiz klasörünü kontrol edin.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Faturama nasıl ulaşırım?</summary>
+          <div class="faq-body">
+            <p>Hesabınızda <strong>Ayarlar → Faturalandırma</strong> bölümünden geçmiş faturalarınızı görüntüleyebilir ve PDF olarak indirebilirsiniz. Fatura bilgilerinizde bir hata varsa destek talebi oluşturun.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Hesap bilgilerimi nasıl güncellerim?</summary>
+          <div class="faq-body">
+            <p>Sağ üstteki profil menüsünden <strong>Hesap Ayarları</strong>na girerek ad, e-posta ve iletişim bilgilerinizi güncelleyebilirsiniz. E-posta değişikliği güvenlik nedeniyle doğrulama gerektirir.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Destek talebime ne zaman yanıt alırım?</summary>
+          <div class="faq-body">
+            <p>Talepler çalışma saatleri içinde (Hafta içi 09:00–18:00) genellikle <strong>1 iş günü</strong> içinde yanıtlanır. Yoğun dönemlerde süre uzayabilir; acil durumlar için talebinizde bunu belirtin.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Verilerim güvende mi?</summary>
+          <div class="faq-body">
+            <p>Verileriniz şifreli olarak saklanır ve yalnızca yetkili ekip üyeleri erişebilir. Gizlilik ve güvenlik uygulamalarımız hakkında ayrıntılı bilgi için bizimle iletişime geçebilirsiniz.</p>
+          </div>
+        </details>
+      </div>
+      <p class="faq-empty" id="faq-empty" hidden>Aramanızla eşleşen bir soru bulunamadı. Aşağıdan destek talebi oluşturabilirsiniz.</p>
+    </section>
+
+    <!-- DESTEK TALEBİ -->
+    <section id="talep" class="container section">
+      <div class="ticket-wrap">
+        <div class="ticket-intro">
+          <h2>Destek Talebi Oluştur</h2>
+          <p>Aradığınız yanıtı bulamadıysanız aşağıdaki formu doldurun. Konuyu ne kadar ayrıntılı anlatırsanız o kadar hızlı yardımcı olabiliriz.</p>
+          <ul class="ticket-tips">
+            <li>Sorunu adım adım açıklayın.</li>
+            <li>Varsa hata mesajını ekleyin.</li>
+            <li>Hesap e-postanızı doğru yazın.</li>
+          </ul>
+        </div>
+        <form class="ticket-form" id="ticket-form">
+          <div class="field">
+            <label for="name">Ad Soyad</label>
+            <input type="text" id="name" name="name" required placeholder="Adınız Soyadınız" />
+          </div>
+          <div class="field">
+            <label for="email">E-posta</label>
+            <input type="email" id="email" name="email" required placeholder="ornek@krea.tr" />
+          </div>
+          <div class="field">
+            <label for="subject">Konu</label>
+            <input type="text" id="subject" name="subject" required placeholder="Sorununuzu kısaca özetleyin" />
+          </div>
+          <div class="field">
+            <label for="message">Mesaj</label>
+            <textarea id="message" name="message" rows="5" required placeholder="Sorununuzu ayrıntılı olarak yazın…"></textarea>
+          </div>
+          <button class="btn btn-primary btn-block" type="submit">Talebi Gönder</button>
+          <p class="form-note">Gönder’e bastığınızda talebiniz e-posta uygulamanız üzerinden destek ekibine iletilir.</p>
+        </form>
+      </div>
+    </section>
+
+    <!-- SİSTEM DURUMU -->
+    <section id="durum" class="container section">
+      <h2>Sistem Durumu</h2>
+      <div class="status-card">
+        <span class="status-dot" aria-hidden="true"></span>
+        <div>
+          <strong>Tüm sistemler çalışıyor</strong>
+          <p>Bilinen bir kesinti veya aksaklık bulunmuyor.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- İLETİŞİM -->
+    <section id="iletisim" class="container section">
+      <h2>İletişim</h2>
+      <div class="contact-grid">
+        <div class="contact-item">
+          <span class="contact-icon">✉️</span>
+          <h3>E-posta</h3>
+          <p><a href="mailto:destek@krea.tr">destek@krea.tr</a></p>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">🕐</span>
+          <h3>Çalışma Saatleri</h3>
+          <p>Hafta içi 09:00 – 18:00</p>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">🌐</span>
+          <h3>Web</h3>
+          <p><a href="https://krea.tr" target="_blank" rel="noopener">krea.tr</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true">K</span>
+        <span class="brand-text">Krea <strong>Destek</strong></span>
+      </a>
+      <p class="footer-copy">&copy; <span id="year"></span> Krea. Tüm hakları saklıdır.</p>
+    </div>
+  </footer>
+
+  <script src="assets/main.js" defer></script>
+</body>
+</html>

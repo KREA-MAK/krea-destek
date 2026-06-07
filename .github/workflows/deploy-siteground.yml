@@ -67,7 +67,7 @@ jobs:
           rsync -avz --delete \
             --exclude ".DS_Store" \
             --exclude "README.md" \
-            -e "ssh -p ${SG_SSH_PORT:-18765} -o StrictHostKeyChecking=no" \
+            -e "ssh -p ${SG_SSH_PORT:-18765} -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectTimeout=20 -o ServerAliveInterval=10 -o ServerAliveCountMax=3" \
             site/ "${SG_SSH_USER}@${SG_SSH_HOST}:${SG_DEPLOY_PATH}/"
         env:
           SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}

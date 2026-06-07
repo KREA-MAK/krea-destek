@@ -25,7 +25,7 @@ SRC_DIR="$ROOT_DIR/site/"
 : "${SG_DEPLOY_PATH:?SG_DEPLOY_PATH tanımlı değil}"
 SG_SSH_PORT="${SG_SSH_PORT:-18765}"
 
-SSH_OPTS=(-p "$SG_SSH_PORT" -o StrictHostKeyChecking=accept-new)
+SSH_OPTS=(-p "$SG_SSH_PORT" -o StrictHostKeyChecking=accept-new -o ConnectTimeout=20 -o ServerAliveInterval=10 -o ServerAliveCountMax=3)
 
 # Parola korumalı anahtar varsa, parolayı ssh-agent'a non-interaktif yükle.
 if [[ -n "${SG_SSH_KEY:-}" && -n "${SG_SSH_PASSPHRASE:-}" ]]; then

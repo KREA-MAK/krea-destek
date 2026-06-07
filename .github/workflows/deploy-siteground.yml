@@ -38,7 +38,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SG_SSH_KEY }}" > ~/.ssh/id_deploy
           chmod 600 ~/.ssh/id_deploy
-          ssh-keyscan -p "${SG_SSH_PORT:-18765}" -H "${{ secrets.SG_SSH_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          ssh-keyscan -4 -p "${SG_SSH_PORT:-18765}" -H "${{ secrets.SG_SSH_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
 
           # ssh-agent başlat; sonraki adımlar için ortam değişkenlerini taşı
           eval "$(ssh-agent -s)"
@@ -64,10 +64,12 @@ jobs:
       - name: Deploy via rsync
         if: steps.check.outputs.configured == 'true'
         run: |
+          # GitHub runner'larında IPv6 yok; host AAAA kaydına çözülürse ssh
+          # "Network is unreachable" verir. -4 ile IPv4'e zorluyoruz.
           rsync -avz --delete \
             --exclude ".DS_Store" \
             --exclude "README.md" \
-            -e "ssh -p ${SG_SSH_PORT:-18765} -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectTimeout=20 -o ServerAliveInterval=10 -o ServerAliveCountMax=3" \
+            -e "ssh -4 -p ${SG_SSH_PORT:-18765} -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectTimeout=20 -o ServerAliveInterval=10 -o ServerAliveCountMax=3" \
             site/ "${SG_SSH_USER}@${SG_SSH_HOST}:${SG_DEPLOY_PATH}/"
         env:
           SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}

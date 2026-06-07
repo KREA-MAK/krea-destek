@@ -41,6 +41,7 @@ tanımlayın:
 | `SG_SSH_USER`    | SSH kullanıcı adı                                        |
 | `SG_SSH_PORT`    | SSH portu (SiteGround genelde `18765`)                   |
 | `SG_SSH_KEY`     | Özel SSH anahtarı (PEM içeriği)                          |
+| `SG_SSH_PASSPHRASE` | (Opsiyonel) Anahtar parola korumalıysa parolası      |
 | `SG_DEPLOY_PATH` | Hedef dizin, ör. `~/www/destek.krea.tr/public_html`      |
 
 > SiteGround'da SSH anahtarını **Site Tools → Devs → SSH Keys Manager**
@@ -54,6 +55,7 @@ export SG_SSH_USER="kullanici"
 export SG_SSH_PORT="18765"
 export SG_DEPLOY_PATH="~/www/destek.krea.tr/public_html"
 export SG_SSH_KEY="$HOME/.ssh/siteground_key"   # opsiyonel
+export SG_SSH_PASSPHRASE="anahtar-parolasi"     # opsiyonel (parola korumalı anahtar)
 ./scripts/deploy-siteground.sh
 ```
 

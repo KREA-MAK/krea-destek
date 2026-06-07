@@ -27,20 +27,39 @@ jobs:
         run: |
           if [ -z "${{ secrets.SG_SSH_HOST }}" ]; then
             echo "configured=false" >> "$GITHUB_OUTPUT"
-            echo "::notice title=SiteGround deploy atlandı::SG_SSH_* secret'ları tanımlı değil. Deploy için Settings → Secrets and variables → Actions altında SG_SSH_HOST, SG_SSH_USER, SG_SSH_PORT, SG_SSH_KEY, SG_DEPLOY_PATH ekleyin."
+            echo "::notice title=SiteGround deploy atlandı::SG_SSH_* secret'ları tanımlı değil. Deploy için Settings → Secrets and variables → Actions altında SG_SSH_HOST, SG_SSH_USER, SG_SSH_PORT, SG_SSH_KEY, SG_DEPLOY_PATH (ve gerekiyorsa SG_SSH_PASSPHRASE) ekleyin."
           else
             echo "configured=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Setup SSH key
+      - name: Setup SSH key and agent
         if: steps.check.outputs.configured == 'true'
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SG_SSH_KEY }}" > ~/.ssh/id_deploy
           chmod 600 ~/.ssh/id_deploy
           ssh-keyscan -p "${SG_SSH_PORT:-18765}" -H "${{ secrets.SG_SSH_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+          # ssh-agent başlat; sonraki adımlar için ortam değişkenlerini taşı
+          eval "$(ssh-agent -s)"
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
+          echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> "$GITHUB_ENV"
+
+          if [ -n "${SG_SSH_PASSPHRASE}" ]; then
+            # Parola korumalı anahtarı non-interaktif olarak agent'a ekle
+            ASKPASS="$(mktemp)"
+            printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$SG_SSH_PASSPHRASE"\n' > "$ASKPASS"
+            chmod +x "$ASKPASS"
+            SSH_ASKPASS="$ASKPASS" SSH_ASKPASS_REQUIRE=force DISPLAY=:0 \
+              ssh-add ~/.ssh/id_deploy
+            rm -f "$ASKPASS"
+          else
+            ssh-add ~/.ssh/id_deploy
+          fi
         env:
+          SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}
           SG_SSH_PORT: ${{ secrets.SG_SSH_PORT }}
+          SG_SSH_PASSPHRASE: ${{ secrets.SG_SSH_PASSPHRASE }}
 
       - name: Deploy via rsync
         if: steps.check.outputs.configured == 'true'
@@ -48,7 +67,7 @@ jobs:
           rsync -avz --delete \
             --exclude ".DS_Store" \
             --exclude "README.md" \
-            -e "ssh -p ${SG_SSH_PORT:-18765} -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no" \
+            -e "ssh -p ${SG_SSH_PORT:-18765} -o StrictHostKeyChecking=no" \
             site/ "${SG_SSH_USER}@${SG_SSH_HOST}:${SG_DEPLOY_PATH}/"
         env:
           SG_SSH_HOST: ${{ secrets.SG_SSH_HOST }}

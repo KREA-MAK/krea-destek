@@ -9,7 +9,8 @@
 #   SG_DEPLOY_PATH Sunucudaki hedef dizin (ör. ~/www/destek.krea.tr/public_html)
 #
 # İsteğe bağlı:
-#   SG_SSH_KEY     Özel anahtar dosyasının yolu (verilmezse ssh-agent/varsayılan kullanılır)
+#   SG_SSH_KEY        Özel anahtar dosyasının yolu (verilmezse ssh-agent/varsayılan kullanılır)
+#   SG_SSH_PASSPHRASE Anahtarın parolası (parola korumalı anahtarlar için)
 #
 # Kullanım:
 #   SG_SSH_HOST=... SG_SSH_USER=... SG_DEPLOY_PATH=... ./scripts/deploy-siteground.sh
@@ -25,7 +26,18 @@ SRC_DIR="$ROOT_DIR/site/"
 SG_SSH_PORT="${SG_SSH_PORT:-18765}"
 
 SSH_OPTS=(-p "$SG_SSH_PORT" -o StrictHostKeyChecking=accept-new)
-if [[ -n "${SG_SSH_KEY:-}" ]]; then
+
+# Parola korumalı anahtar varsa, parolayı ssh-agent'a non-interaktif yükle.
+if [[ -n "${SG_SSH_KEY:-}" && -n "${SG_SSH_PASSPHRASE:-}" ]]; then
+  eval "$(ssh-agent -s)" >/dev/null
+  trap 'ssh-agent -k >/dev/null 2>&1 || true' EXIT
+  ASKPASS="$(mktemp)"
+  printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$SG_SSH_PASSPHRASE"\n' > "$ASKPASS"
+  chmod +x "$ASKPASS"
+  SSH_ASKPASS="$ASKPASS" SSH_ASKPASS_REQUIRE=force DISPLAY="${DISPLAY:-:0}" \
+    ssh-add "$SG_SSH_KEY"
+  rm -f "$ASKPASS"
+elif [[ -n "${SG_SSH_KEY:-}" ]]; then
   SSH_OPTS+=(-i "$SG_SSH_KEY")
 fi
 
